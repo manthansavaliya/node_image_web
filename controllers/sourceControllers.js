@@ -1,3 +1,6 @@
+const fs = require('fs');
+const path = require('path');
+const axios = require('axios');
 const Source = require('../models/source.js');
 
 const createSource = async (req, res) => {
@@ -6,9 +9,27 @@ const createSource = async (req, res) => {
         let image;
 
         if (req.file) {
+            // File upload
             image = req.file.filename;
         } else if (imageUrl) {
-            image = imageUrl;
+            // Download image from URL and save to uploads
+            const ext = path.extname(imageUrl).split('?')[ 0 ] || '.jpg';
+            const filename = `${Date.now()}${ext}`;
+            const filePath = path.join(__dirname, '../uploads', filename);
+
+            const response = await axios({
+                method: 'GET',
+                url: imageUrl,
+                responseType: 'stream'
+            });
+
+            await new Promise((resolve, reject) => {
+                const stream = response.data.pipe(fs.createWriteStream(filePath));
+                stream.on('finish', resolve);
+                stream.on('error', reject);
+            });
+
+            image = filename;
         } else {
             return res.status(400).json({ message: 'No image file or URL provided.' });
         }
