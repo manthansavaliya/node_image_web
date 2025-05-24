@@ -2,10 +2,15 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gallery - Image Processing Platform</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
     />
     <link rel="stylesheet" href="/css/style.css" />
     <style>
@@ -15,7 +20,6 @@
       }
       .gallery-section {
         padding: 100px 0;
-        background: transparent;
       }
       .gallery-title {
         color: #1a365d;
@@ -23,10 +27,10 @@
         margin-bottom: 3rem;
         position: relative;
         padding-bottom: 15px;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
         font-size: 2.5rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
       }
-      .gallery-title:after {
+      .gallery-title::after {
         content: "";
         position: absolute;
         bottom: 0;
@@ -38,18 +42,14 @@
         border-radius: 4px;
       }
       .gallery-card {
-        cursor: pointer;
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.4s ease;
         border: none;
         border-radius: 15px;
         overflow: hidden;
         background: white;
         box-shadow: 0 8px 15px rgba(0, 0, 0, 0.05);
+        height: 100%;
         position: relative;
-        margin-bottom: 25px;
-        max-width: 350px;
-        margin-left: auto;
-        margin-right: auto;
       }
       .gallery-card:hover {
         transform: translateY(-5px);
@@ -57,41 +57,23 @@
       }
       .gallery-card .card-img-top {
         height: 220px;
-        width: 100%;
         object-fit: contain;
         background-color: #f8fafc;
         padding: 15px;
-        transition: all 0.4s ease;
       }
-      .gallery-card:hover .card-img-top {
-        transform: scale(1.03);
-      }
-      .gallery-card .card-body {
-        padding: 1.25rem;
-        background: white;
-        position: relative;
-      }
-      .gallery-card .card-title {
+      .card-title {
         color: #2d3748;
         font-weight: 600;
-        margin-bottom: 0.75rem;
-        font-size: 1.1rem;
-        line-height: 1.4;
       }
-      .gallery-card .card-text {
+      .card-text {
         color: #4a5568;
         font-size: 0.9rem;
-        line-height: 1.5;
-        margin-bottom: 2.5rem;
+        overflow: hidden;
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
-        overflow: hidden;
       }
       .view-more-btn {
-        position: absolute;
-        bottom: 15px;
-        right: 15px;
         background: linear-gradient(90deg, #4299e1, #48bb78);
         color: white;
         border: none;
@@ -104,58 +86,37 @@
       }
       .view-more-btn:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(66, 153, 225, 0.3);
         background: linear-gradient(90deg, #3182ce, #38a169);
+        box-shadow: 0 6px 20px rgba(66, 153, 225, 0.3);
       }
-      .modal-dialog {
-        max-width: 90vw;
-        margin: 1.75rem auto;
+      .download-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        color: #4299e1;
+        font-size: 1.2rem;
+        z-index: 10;
+        background: rgba(255, 255, 255, 0.8);
+        padding: 6px;
+        border-radius: 50%;
+        text-decoration: none;
+        transition: all 0.3s ease;
+      }
+      .download-btn:hover {
+        color: #2b6cb0;
+        background: rgba(255, 255, 255, 1);
       }
       .modal-image {
         width: 100%;
-        height: auto;
         max-height: 85vh;
         object-fit: contain;
         background-color: #f8fafc;
         padding: 30px;
         border-radius: 12px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
       }
       .modal-content {
-        background-color: white;
-        border: none;
         border-radius: 24px;
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-      }
-      .modal-header {
-        border-bottom: 1px solid #e2e8f0;
-        padding: 1.5rem;
-        background-color: #f8fafc;
-        border-radius: 24px 24px 0 0;
-      }
-      .modal-body {
-        padding: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: white;
-      }
-      .modal-footer {
-        border-top: 1px solid #e2e8f0;
-        padding: 1.5rem;
-        background-color: #f8fafc;
-        border-radius: 0 0 24px 24px;
-      }
-      .modal-title {
-        color: #2d3748;
-        font-weight: 700;
-        font-size: 1.5rem;
-      }
-      .modal-description {
-        color: #4a5568;
-        margin: 0;
-        font-size: 1.1rem;
-        line-height: 1.7;
       }
       .feedback-message {
         position: fixed;
@@ -168,10 +129,9 @@
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
         transform: translateY(100px);
         opacity: 0;
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.4s ease;
         z-index: 1000;
         font-weight: 600;
-        font-size: 1.1rem;
       }
       .feedback-message.show {
         transform: translateY(0);
@@ -186,20 +146,28 @@
         color: #4a5568;
         font-size: 1.2rem;
       }
-      .no-images i {
-        font-size: 3rem;
-        color: #4299e1;
-        margin-bottom: 1.5rem;
+      .modal-footer-1 {
+        flex-shrink: 0;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: flex-end;
+        padding: 1rem;
+        background-color: var(--bs-modal-footer-bg, #f8f9fa);
+        border-top: 1px solid var(--bs-modal-footer-border-color, #dee2e6);
+        border-bottom-right-radius: var(--bs-modal-inner-border-radius, 0.5rem);
+        border-bottom-left-radius: var(--bs-modal-inner-border-radius, 0.5rem);
       }
-      .row {
-        margin: 0 -10px;
-      }
-      .col-md-4 {
-        padding: 0 10px;
+      .modal-description {
+        white-space: pre-wrap;
+        padding: 10px;
+        font-size: 0.95rem;
+        color: #4a5568;
+        width: 100%;
       }
     </style>
   </head>
   <body>
+    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
       <div class="container">
         <a class="navbar-brand" href="/">Image Processor</a>
@@ -225,6 +193,7 @@
       </div>
     </nav>
 
+    <!-- Gallery Section -->
     <section class="gallery-section">
       <div class="container">
         <h2 class="gallery-title text-center">Image Gallery</h2>
@@ -232,28 +201,43 @@
           <% if (sources.length === 0) { %>
           <div class="col-12">
             <div class="no-images">
-              <i class="fas fa-images mb-3" style="font-size: 2rem"></i>
+              <i class="bi bi-images mb-3" style="font-size: 2rem"></i>
               <p>No images uploaded yet.</p>
             </div>
           </div>
-          <% } %> <% sources.forEach(source => { %>
-          <div class="col-md-4 col-lg-4">
-            <div class="gallery-card card h-100">
+          <% } else { %>
+          <% sources.forEach(source => { %>
+          <div class="col-12 col-sm-6 col-md-4">
+            <div class="gallery-card card">
+              <a
+                href="/uploads/<%= source.image %>"
+                class="download-btn"
+                download="<%= source.image %>"
+                data-bs-toggle="tooltip"
+                title="Download Image"
+              >
+                <i class="bi bi-cloud-arrow-down-fill"></i>
+              </a>
               <img
                 src="/uploads/<%= source.image %>"
                 class="card-img-top"
                 alt="<%= source.title %>"
+                loading="lazy"
               />
-              <div class="card-body">
+              <div class="card-body position-relative">
                 <h5 class="card-title"><%= source.title %></h5>
                 <p class="card-text"><%= source.description %></p>
-                <button type="button" class="view-more-btn">
-                  <i class="fas fa-eye me-2"></i>View More
+                <button
+                  type="button"
+                  class="view-more-btn position-absolute bottom-0 end-0 m-3"
+                >
+                  <i class="bi bi-eye me-2"></i>View More
                 </button>
               </div>
             </div>
           </div>
           <% }) %>
+          <% } %>
         </div>
       </div>
     </section>
@@ -266,18 +250,19 @@
       aria-labelledby="imageModalLabel"
       aria-hidden="true"
     >
-      <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
-          <div class="modal-header">
+          <div class="modal-header bg-light">
             <h5 class="modal-title" id="imageModalLabel"></h5>
             <button
               type="button"
               class="btn-close"
               data-bs-dismiss="modal"
-              aria-label="Close"
             ></button>
           </div>
-          <div class="modal-body">
+          <div
+            class="modal-body d-flex justify-content-center align-items-center"
+          >
             <img
               src=""
               class="modal-image"
@@ -285,8 +270,8 @@
               alt="Full size image"
             />
           </div>
-          <div class="modal-footer">
-            <p class="modal-description" id="modalDescription"></p>
+          <div class="modal-footer-1 bg-light">
+            <p class="modal-description mb-0" id="modalDescription"></p>
           </div>
         </div>
       </div>
@@ -294,16 +279,21 @@
 
     <!-- Feedback Message -->
     <div class="feedback-message" id="feedbackMessage">
-      <i class="fas fa-heart"></i> Great choice! Enjoy viewing this image.
+      <i class="bi bi-heart-fill me-2"></i> Great choice! Enjoy viewing this
+      image.
     </div>
 
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script
-      src="https://kit.fontawesome.com/your-font-awesome-kit.js"
-      crossorigin="anonymous"
-    ></script>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
+        const tooltipTriggerList = [].slice.call(
+          document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        );
+        tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+          new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+
         const imageModal = new bootstrap.Modal(
           document.getElementById("imageModal")
         );
@@ -312,37 +302,24 @@
         const modalDescription = document.getElementById("modalDescription");
         const feedbackMessage = document.getElementById("feedbackMessage");
 
-        // Add click event to all gallery cards
         document.querySelectorAll(".gallery-card").forEach((card) => {
-          card.addEventListener("click", function (e) {
-            // Prevent click if the view more button was clicked
-            if (e.target.closest('.view-more-btn')) {
-              const img = this.querySelector(".card-img-top");
-              const title = this.querySelector(".card-title").textContent;
-              const description = this.querySelector(".card-text").textContent;
-
+          card
+            .querySelector(".view-more-btn")
+            .addEventListener("click", function (e) {
+              e.stopPropagation();
+              const img = card.querySelector(".card-img-top");
+              const title = card.querySelector(".card-title").textContent;
+              const description = card.querySelector(".card-text").textContent;
               modalImage.src = img.src;
               modalTitle.textContent = title;
               modalDescription.textContent = description;
               imageModal.show();
-
-              // Show feedback message
               feedbackMessage.classList.add("show");
               setTimeout(() => {
                 feedbackMessage.classList.remove("show");
               }, 3000);
-            }
-          });
+            });
         });
-
-        // Close modal when clicking outside the image
-        document
-          .querySelector(".modal-body")
-          .addEventListener("click", function (e) {
-            if (e.target === this) {
-              imageModal.hide();
-            }
-          });
       });
     </script>
   </body>
